@@ -1,5 +1,6 @@
 .App {
-  text-align: center;
+  text-align: left;
+	margin: 40px;
 }
 
 .App-logo {
@@ -21,6 +22,37 @@
 
 .App-link {
   color: #61dafb;
+}
+
+numericinput {
+	padding: 10px;
+	margin: 10px;
+}
+
+code {
+	font-size: 20;
+	font-family: monospace;
+	background-color: #E0E0E0;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+codeline {
+	text-align: center;
+	font-size: 20;
+	font-family: monospace;
+	background-color: #E0E0E0;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border: 2px solid gray;
+	right: 20px;
+	left: 20px;
+	margin-left: 40px;
+	margin-right: 40px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 @keyframes App-logo-spin {
