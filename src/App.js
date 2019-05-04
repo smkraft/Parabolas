@@ -16,6 +16,32 @@ class App extends React.Component {
 	}
 }
 
+var data = {
+	labels: [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+	datasets: [
+		{
+			label: "Parabola point",
+			fillColor: "rgba(220,220,220,0.2)",
+			strokeColor: "rgba(220,220,220,1)",
+			pointColor: "rgba(220,220,220,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(220,220,220,1)",
+			data: [21 * 0]
+		},
+		{
+			label: "First difference",
+			fillColor: "rgba(151,187,205,0.2)",
+			strokeColor: "rgba(151,187,205,1)",
+			pointColor: "rgba(151,187,205,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(151,187,205,1)",
+			data: [21 * 0]
+		}
+	]
+};
+
 class Parabola extends React.Component {
 	constructor(props) {
 		super(props);
@@ -233,6 +259,15 @@ class Parabola extends React.Component {
 		recursivetxt: recursivetxt,
 	});
 
+
+	var index;
+	var count = 0;
+	for (index = -vxN - 10; index <= -vxN + 10; index++, count++) {
+		data.labels[count] = "X = " + index;
+		data.datasets[0].data[count] = this.state.a * index * index + this.state.b * index + this.state.c;
+		//data.datasets[1].data[count] = 2 * this.state.a * index + this.state.b;
+	}
+
 	};
 
 	render() {
@@ -260,6 +295,9 @@ class Parabola extends React.Component {
 						vy={this.state.vy}
 						curt={this.state.recursivetxt}
 					/>
+				</div>
+				<div className="app-graph">
+					<Graph />
 				</div>
 			</div>
 		);
@@ -294,7 +332,8 @@ class Intro extends React.Component {
 					<li>Solve for the roots (using the quadratic equation), or tell you if there are no roots</li>
 					<li>Show you the graphing form of the parabola</li>
 					<li>Show you the vertex</li>
-					<li>Give the recursive equation for the parabol</li>
+					<li>Give the recursive equation for the parabola</li>
+					<li>Graph the parabola</li>
 					</ul>
 		
 					The Internet didn't exist when I was in high school, but if it did I would have wanted something like this....
@@ -369,5 +408,77 @@ class Solution extends React.Component {
 		);
 	}
 }
+
+var LineChart = require("react-chartjs").Line;
+
+var options = {
+
+	///Boolean - Whether grid lines are shown across the chart
+	scaleShowGridLines : true,
+
+	//String - Colour of the grid lines
+	scaleGridLineColor : "rgba(0,0,0,.05)",
+
+	//Number - Width of the grid lines
+	scaleGridLineWidth : 3,
+
+	//Boolean - Whether to show horizontal lines (except X axis)
+	scaleShowHorizontalLines: true,
+
+	//Boolean - Whether to show vertical lines (except Y axis)
+	scaleShowVerticalLines: true,
+
+	//Boolean - Whether the line is curved between points
+	bezierCurve : true,
+
+	//Number - Tension of the bezier curve between points
+	bezierCurveTension : 0.4,
+
+	//Boolean - Whether to show a dot for each point
+	pointDot : true,
+
+	//Number - Radius of each point dot in pixels
+	pointDotRadius : 4,
+
+	//Number - Pixel width of point dot stroke
+	pointDotStrokeWidth : 1,
+
+	//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+	pointHitDetectionRadius : 20,
+
+	//Boolean - Whether to show a stroke for datasets
+	datasetStroke : true,
+
+	//Number - Pixel width of dataset stroke
+	datasetStrokeWidth : 3,
+
+	//Boolean - Whether to fill the dataset with a colour
+	datasetFill : true,
+
+	//Boolean - Whether to horizontally center the label and point dot inside the grid
+	offsetGridLines : false,
+
+	scales: {
+		yAxes: [{
+			ticks: {
+				beginAtZero: true
+			}
+		}],
+		xAxis: [{
+			ticks: {
+				beginAtZero: true
+			}
+		}]
+	}
+
+};
+
+class Graph extends React.Component {
+	render() {
+    return (
+			<LineChart data={data} options={options} width="600" height="600"/>
+		);
+  }
+};
 
 export default App;
