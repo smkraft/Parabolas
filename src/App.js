@@ -31,6 +31,7 @@ class Parabola extends React.Component {
 			vxN : 0,
 			vx: 0,
 			vy : 0,
+			recursivetxt : "",
 		};
 
    	this.solve();
@@ -198,6 +199,40 @@ class Parabola extends React.Component {
 		vy: vy
 	});
 
+	var secondDiff = 2 * this.state.a;
+	/* Use Y intercept for point. */
+	var y0 = this.state.c;
+	var y1 = this.state.a * 1 * 1 + this.state.b * 1 + this.state.c;
+	var diffAtX0 = y1 - y0;
+
+	/* Equation is:
+		y(x) = y(x - 1) + secondDiff * x + y(x=0)
+	*/
+	var recursivetxt = "y(x) = y(x-1) ";
+	if (secondDiff > 0.0) {
+		recursivetxt += "+ ";
+	}
+	else {
+		recursivetxt += "- ";
+	}
+
+	if (Math.abs(secondDiff) != 1.0) {
+		recursivetxt += Math.abs(secondDiff);
+	}
+
+	recursivetxt += "x ";
+
+	if (diffAtX0 > 0.0) {
+		recursivetxt += "- " + Math.abs(diffAtX0);
+	}
+	else {
+		recursivetxt += "+ " + Math.abs(diffAtX0);
+	}
+
+	this.setState({
+		recursivetxt: recursivetxt,
+	});
+
 	};
 
 	render() {
@@ -223,6 +258,7 @@ class Parabola extends React.Component {
 						g={this.state.graph}
 						vx={this.state.vx}
 						vy={this.state.vy}
+						curt={this.state.recursivetxt}
 					/>
 				</div>
 			</div>
@@ -239,7 +275,7 @@ class Intro extends React.Component {
 					Hi, Ally, Aviva, Casey, and Emma -
 					<br></br>
 					<br></br>
-					We were talking after math class last Thursday about what kinds of computer programs might be interesting to write.
+					We were talking after math night at Casey's last Thursday about what kinds of computer programs might be interesting to write.
 					I thought about it a bit, and it occurred to me that you all are going to have to be using the Quadratic Equation coming
 					up pretty soon.  This equation lets you solve for the roots of a parabola without factoring.  It is a little daunting, and
 					looks like this:
@@ -251,9 +287,9 @@ class Intro extends React.Component {
 					<br></br>
 					<br></br>
 					
-					I recall from my high school math days that it is really easy to make math mistakes when solving this, so it would be handy
-					to have a computer program where you could check the solution to this.  And if I had a program to do that, it would probably
-					be handy to do some other parabola stuff as well.  It would probably be a program that would take a parabola in standard form, and then:
+					I recall from my high school math days that it is really easy to make math mistakes when solving this, so I would have liked
+					to have a computer program to check my work.  And it might be handy to do some other parabola stuff as well.
+					It might do these things....
 					<ul>
 					<li>Solve for the roots (using the quadratic equation), or tell you if there are no roots</li>
 					<li>Show you the graphing form of the parabola</li>
@@ -300,19 +336,33 @@ class Solution extends React.Component {
 			<div className="Solution">
 				<br></br>
 				Standard equation:
+				<br></br>
+				<br></br>
 				<codeline>{this.props.std}</codeline>
 				<br></br>
 				<br></br>
 				Graphing equation:
+				<br></br>
+				<br></br>
 				<codeline>{this.props.g}</codeline>
 				<br></br>
 				<br></br>
 				X intercepts (roots) :
+				<br></br>
+				<br></br>
 				<codeline>{this.props.rt}</codeline>
 				<br></br>
 				<br></br>
 				Vertex:
+				<br></br>
+				<br></br>
 				<codeline>[{this.props.vx}, {this.props.vy}]</codeline>
+				<br></br>
+				<br></br>
+				Recursive equation:
+				<br></br>
+				<br></br>
+				<codeline>{this.props.curt}</codeline>
 				<br></br>
 				<br></br>
 			</div>
