@@ -179,8 +179,8 @@ class Parabola extends React.Component {
 		}
 		else {
 			nx = 2;
-			root1 = -this.state.b - Math.sqrt(radicand) / (2 * this.state.a);
-			root2 = -this.state.b + Math.sqrt(radicand) / (2 * this.state.a);
+			root1 = (-this.state.b - Math.sqrt(radicand)) / (2 * this.state.a);
+			root2 = (-this.state.b + Math.sqrt(radicand)) / (2 * this.state.a);
 		}
 
 		var roottxt = "";
