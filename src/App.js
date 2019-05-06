@@ -1,6 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 import NumericInput from 'react-numeric-input';
 
@@ -21,14 +29,16 @@ var data = {
 	datasets: [
 		{
 			label: "Parabola point",
-			fillColor: "rgba(220,220,220,0.2)",
-			strokeColor: "rgba(220,220,220,1)",
-			pointColor: "rgba(220,220,220,1)",
+			fillColor: "rgba(200,50,200,0.2)",
+			strokeColor: "rgba(200,50,200,1)",
+			pointColor: "rgba(200,50,200,1)",
 			pointStrokeColor: "#fff",
 			pointHighlightFill: "#fff",
-			pointHighlightStroke: "rgba(220,220,220,1)",
+			pointHighlightStroke: "rgba(200,50,200,1)",
 			data: [21 * 0]
-		},
+		}
+		/*
+		,
 		{
 			label: "First difference",
 			fillColor: "rgba(151,187,205,0.2)",
@@ -39,6 +49,7 @@ var data = {
 			pointHighlightStroke: "rgba(151,187,205,1)",
 			data: [21 * 0]
 		}
+		*/
 	]
 };
 
@@ -58,13 +69,23 @@ class Parabola extends React.Component {
 			vx: 0,
 			vy : 0,
 			recursivetxt : "",
+			firstTime : true,
 		};
 
    	this.solve();
 
 	};
 
+	setNotFirstTime() {
+		if (this.state.firstTime) {
+			this.setState({
+				firstTime: false
+			});
+		}
+	};
+
 	changeA(valueAsNumber) {
+		this.setNotFirstTime();
 		this.setState({
 			a: valueAsNumber
 		}, () => {
@@ -73,6 +94,7 @@ class Parabola extends React.Component {
 	};
 
 	changeB(valueAsNumber) {
+		this.setNotFirstTime();
 		this.setState({
 			b: valueAsNumber
 		}, () => {
@@ -81,6 +103,7 @@ class Parabola extends React.Component {
 	};
 
 	changeC(valueAsNumber) {
+		this.setNotFirstTime();
 		this.setState({
 			c: valueAsNumber
 		}, () => {
@@ -91,7 +114,7 @@ class Parabola extends React.Component {
 	solve() {
 		if (this.state.a == 0 || this.state.a == null) {
 			this.setState({
-				standard: "Not a parabola!",
+				standard: "Not a parabola!!",
 				graph: "",
 				roottxt: "",
 				vx: null,
@@ -263,7 +286,7 @@ class Parabola extends React.Component {
 	var index;
 	var count = 0;
 	for (index = -vxN - 10; index <= -vxN + 10; index++, count++) {
-		data.labels[count] = "X = " + index;
+		data.labels[count] = index;
 		data.datasets[0].data[count] = this.state.a * index * index + this.state.b * index + this.state.c;
 		//data.datasets[1].data[count] = 2 * this.state.a * index + this.state.b;
 	}
@@ -274,7 +297,7 @@ class Parabola extends React.Component {
 		return (
 			<div className="Parabola">
 				<div className="app-intro">
-					<Intro />
+					<Intro firstTime={this.state.firstTime}/>
 				</div>
 				<div className="app-entry">
 					<Entry
@@ -283,70 +306,103 @@ class Parabola extends React.Component {
 						c={this.state.c} onChangeC={this.changeC.bind(this)}
 					/>
 				</div>
-				<div className="app-solution">
-					<Solution
-						std={this.state.standard}
-						a={this.state.a}
-						b={this.state.b}
-						c={this.state.c}
-						rt={this.state.roottxt}
-						g={this.state.graph}
-						vx={this.state.vx}
-						vy={this.state.vy}
-						curt={this.state.recursivetxt}
-					/>
-				</div>
-				<div className="app-graph">
-					<Graph />
-				</div>
+				<Container fluid={true}>
+					<Row>
+						<Col md="auto">
+							<div className="app-solution">
+								<Solution
+									std={this.state.standard}
+									a={this.state.a}
+									b={this.state.b}
+									c={this.state.c}
+									rt={this.state.roottxt}
+									g={this.state.graph}
+									vx={this.state.vx}
+									vy={this.state.vy}
+									curt={this.state.recursivetxt}
+								/>
+							</div>
+						</Col>
+						<Col>
+							<div className="app-graph">
+								<Graph />
+							</div>
+						</Col>
+					</Row>
+				</Container>
 			</div>
 		);
 	}
 };
 
 class Intro extends React.Component {
-	render() {
-		return (
-			<div className="Intro">
-				<h2>Parabolas</h2>
-				<p>
-					Hi, Ally, Aviva, Casey, and Emma -
-					<br></br>
-					<br></br>
-					We were talking after math night at Casey's last Thursday about what kinds of computer programs might be interesting to write.
-					I thought about it a bit, and it occurred to me that you all are going to have to be using the Quadratic Equation coming
-					up pretty soon.  This equation lets you solve for the roots of a parabola without factoring.  It is a little daunting, and
-					looks like this:
-					<br></br>
-					<br></br>
-					<codeline>
-					x = [-b +/- sqrt(b^2 - 4ac)]/2a
-					</codeline>
-					<br></br>
-					<br></br>
-					
-					I recall from my high school math days that it is really easy to make math mistakes when solving this, so I would have liked
-					to have a computer program to check my work.  And it might be handy to do some other parabola stuff as well.
-					It might do these things....
-					<ul>
-					<li>Solve for the roots (using the quadratic equation), or tell you if there are no roots</li>
-					<li>Show you the graphing form of the parabola</li>
-					<li>Show you the vertex</li>
-					<li>Give the recursive equation for the parabola</li>
-					<li>Graph the parabola</li>
-					</ul>
-		
-					The Internet didn't exist when I was in high school, but if it did I would have wanted something like this....
-					<br></br>
+  constructor(props) {
+    super(props);
 
-				</p>
-			</div>
-		);
-	}
-};
+    this.state = { show: true };
+  }
+
+  render() {
+    const handleHide = () => this.setState({ show: false });
+    const handleShow = () => this.setState({ show: true });
+    return (
+      <>
+				<Container fluid={true}>
+				<Row>
+				<Col md="auto">
+	  		<h2>Parabolas!</h2>
+				</Col>
+				<Col>
+        {!this.state.show && <Button onClick={handleShow} variant="outline-success">Reopen welcome message</Button>}
+				</Col>
+				</Row>
+
+				</Container>
+
+        <Alert show={this.state.show} variant="success">
+          <Alert.Heading>Hi Ally, Aviva, Casey, and Emma !</Alert.Heading>
+          <p>
+						We were talking after math night at Casey's last Thursday about what kinds of computer programs might be interesting to write.
+						I thought about it a bit, and it occurred to me that you all are going to have to be using the Quadratic Equation coming
+						up pretty soon.  This equation lets you solve for the roots of a parabola without factoring.  It is a little daunting, and
+						looks like this:
+						<br></br>
+						<br></br>
+						<codeline>
+						x = [-b +/- sqrt(b^2 - 4ac)]/2a
+						</codeline>
+						<br></br>
+						<br></br>
+
+						I recall from my high school math days that it is really easy to make math mistakes when solving this, so I would have liked
+						to have a computer program to check my work.  And it might be handy to do some other parabola stuff as well.
+						It might do these things....
+						<ul>
+						<li>Solve for the roots (using the quadratic equation), or tell you if there are no roots</li>
+						<li>Show you the graphing form of the parabola</li>
+						<li>Show you the vertex</li>
+						<li>Give the recursive equation for the parabola</li>
+						<li>Graph the parabola</li>
+						</ul>
+		
+						The Internet didn't exist when I was in high school, but if it did I would have wanted something like this....
+						<br></br>
+          </p>
+          <hr />
+          <div className="d-flex justify-content-end">
+            <Button onClick={handleHide} variant="outline-success">
+              Close this message!
+            </Button>
+          </div>
+        </Alert>
+
+
+      </>
+    );
+  }
+}
 
 					/*
-					<li>Draw a graph of the parabola with appropriate viewing window</li>
 					<li>Allow you to put in an arbitrary x value and solve for y</li>
 					<li>Allow you to put in an arbitrary y value and solve for x</li>
 					*/
@@ -355,14 +411,14 @@ class Entry extends React.Component {
 	render() {
 		return (
 			<div className="Entry">
-				Enter the <code>a</code> coefficient:
-				<NumericInput value={this.props.a} onChange={this.props.onChangeA} size={10}/>
 				<br></br>
-				Enter the <code>b</code> coefficient:
-				<NumericInput value={this.props.b} onChange={this.props.onChangeB} size={10}/>
+				Enter your parabola below:
 				<br></br>
-				Enter the <code>c</code> coefficient:
-				<NumericInput value={this.props.c} onChange={this.props.onChangeC} size={10}/>
+				<br></br>
+				y = <NumericInput value={this.props.a} onChange={this.props.onChangeA} size={3}/> x^2 + 
+				<NumericInput value={this.props.b} onChange={this.props.onChangeB} size={3}/> x +
+				<NumericInput value={this.props.c} onChange={this.props.onChangeC} size={3}/>
+				<br></br>
 				<br></br>
 			</div>
 		);
@@ -373,37 +429,13 @@ class Solution extends React.Component {
 	render() {
 		return (
 			<div className="Solution">
-				<br></br>
-				Standard equation:
-				<br></br>
-				<br></br>
-				<codeline>{this.props.std}</codeline>
-				<br></br>
-				<br></br>
-				Graphing equation:
-				<br></br>
-				<br></br>
-				<codeline>{this.props.g}</codeline>
-				<br></br>
-				<br></br>
-				X intercepts (roots) :
-				<br></br>
-				<br></br>
-				<codeline>{this.props.rt}</codeline>
-				<br></br>
-				<br></br>
-				Vertex:
-				<br></br>
-				<br></br>
-				<codeline>[{this.props.vx}, {this.props.vy}]</codeline>
-				<br></br>
-				<br></br>
-				Recursive equation:
-				<br></br>
-				<br></br>
-				<codeline>{this.props.curt}</codeline>
-				<br></br>
-				<br></br>
+				<ListGroup>
+  				<ListGroup.Item>Standard equation:<br></br><codeX>{this.props.std}</codeX></ListGroup.Item>
+  				<ListGroup.Item>Graphing equation:<br></br><codeX>{this.props.g}</codeX></ListGroup.Item>
+  				<ListGroup.Item>X intercepts (roots):<br></br> <codeX>{this.props.rt}</codeX></ListGroup.Item>
+  				<ListGroup.Item>Vertex:<br></br> <codeX>[{this.props.vx}, {this.props.vy}]</codeX></ListGroup.Item>
+  				<ListGroup.Item>Recursive equation:<br></br> <codeX>{this.props.curt}</codeX></ListGroup.Item>
+				</ListGroup>;
 			</div>
 		);
 	}
@@ -461,22 +493,21 @@ var options = {
 	scales: {
 		yAxes: [{
 			ticks: {
-				beginAtZero: true
+				beginAtZero: false
 			}
 		}],
 		xAxis: [{
 			ticks: {
-				beginAtZero: true
+				beginAtZero: false
 			}
 		}]
 	}
-
 };
 
 class Graph extends React.Component {
 	render() {
     return (
-			<LineChart data={data} options={options} width="600" height="600"/>
+			<LineChart data={data} options={options} width="500" height="500"/>
 		);
   }
 };

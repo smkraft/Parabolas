@@ -29,12 +29,18 @@ numericinput {
 	margin: 10px;
 }
 
-code {
-	font-size: 20;
+codeX {
+	font-size: 12pt;
 	font-family: monospace;
 	background-color: #E0E0E0;
-	padding-left: 5px;
-	padding-right: 5px;
+	color: black;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border: 2px solid gray;
 }
 
 codeline {
