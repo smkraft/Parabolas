@@ -1,27 +1,33 @@
 .App {
-  text-align: left;
+	text-align: left;
 	margin: 40px;
+	background-color: #BDEDFF;
+  	background: linear-gradient(to right, #BDEDFF, #82CAFF);
+	background: -moz-linear-gradient(to right, #BDEDFF, #82CAFF);
+	background: -webkit-linear-gradient(to right, #BDEDFF, #82CAFF);
+	border: 2px solid #82CAFF;
+	padding: 10px;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+	animation: App-logo-spin infinite 20s linear;
+	height: 40vmin;
+	pointer-events: none;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+	background-color: #282c34;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: white;
 }
 
 .App-link {
-  color: #61dafb;
+	color: #61dafb;
 }
 
 numericinput {
@@ -62,10 +68,10 @@ codeline {
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+	from {
+	  transform: rotate(0deg);
+	}
+	to {
+	  transform: rotate(360deg);
+	}
 }

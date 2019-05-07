@@ -5,12 +5,15 @@
   "dependencies": {
     "chart.js": "^1.1.1",
     "gh-pages": "^2.0.1",
+    "katex": "^0.10.1",
     "react": "^16.8.6",
     "react-chartjs": "^1.2.0",
     "react-dom": "^16.8.6",
+    "react-katex": "^2.0.2",
     "react-mathjax": "^1.0.1",
     "react-mathjax-preview": "^0.1.11",
-    "react-scripts": "3.0.0"
+    "react-scripts": "3.0.0",
+    "sprint.js": "0.0.9"
   },
   "scripts": {
     "start": "react-scripts start",

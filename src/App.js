@@ -12,6 +12,11 @@ import Col from 'react-bootstrap/Col';
 
 import NumericInput from 'react-numeric-input';
 
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
+
+var sprintf = require('sprintf-js').sprintf;
+
 class App extends React.Component {
 	render() {
 		return (
@@ -278,6 +283,7 @@ class Parabola extends React.Component {
 		recursivetxt += "+ " + Math.abs(diffAtX0);
 	}
 
+	recursivetxt += " , y(0) = " + y0;
 	this.setState({
 		recursivetxt: recursivetxt,
 	});
@@ -335,6 +341,8 @@ class Parabola extends React.Component {
 	}
 };
 
+var qe = "<BlockMath math={'\\int_0^\\infty x^2 dx'}/>";
+
 class Intro extends React.Component {
   constructor(props) {
     super(props);
@@ -367,16 +375,16 @@ class Intro extends React.Component {
 						up pretty soon.  This equation lets you solve for the roots of a parabola without factoring.  It is a little daunting, and
 						looks like this:
 						<br></br>
-						<br></br>
-						<codeline>
-						x = [-b +/- sqrt(b^2 - 4ac)]/2a
-						</codeline>
-						<br></br>
+						<BlockMath math={'x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}'}/>
+						when the following is true:
+						<BlockMath math={'(b^2-4ac)>={0}'}/>
 						<br></br>
 
 						I recall from my high school math days that it is really easy to make math mistakes when solving this, so I would have liked
 						to have a computer program to check my work.  And it might be handy to do some other parabola stuff as well.
 						It might do these things....
+						<br></br>
+						<br></br>
 						<ul>
 						<li>Solve for the roots (using the quadratic equation), or tell you if there are no roots</li>
 						<li>Show you the graphing form of the parabola</li>
