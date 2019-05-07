@@ -73,7 +73,7 @@ class Parabola extends React.Component {
 			vxN : 0,
 			vx: 0,
 			vy : 0,
-			recursivetxt : "",
+			recursivetxt : "y(x) = y(x-1) + 2x",
 			firstTime : true,
 		};
 
@@ -284,6 +284,7 @@ class Parabola extends React.Component {
 	}
 
 	recursivetxt += " , y(0) = " + y0;
+
 	this.setState({
 		recursivetxt: recursivetxt,
 	});
@@ -325,7 +326,7 @@ class Parabola extends React.Component {
 									g={this.state.graph}
 									vx={this.state.vx}
 									vy={this.state.vy}
-									curt={this.state.recursivetxt}
+									recur={this.state.recursivetxt}
 								/>
 							</div>
 						</Col>
@@ -438,11 +439,11 @@ class Solution extends React.Component {
 		return (
 			<div className="Solution">
 				<ListGroup>
-  				<ListGroup.Item>Standard equation:<br></br><codeX>{this.props.std}</codeX></ListGroup.Item>
-  				<ListGroup.Item>Graphing equation:<br></br><codeX>{this.props.g}</codeX></ListGroup.Item>
+  				<ListGroup.Item>Standard equation:<br></br><codeX><InlineMath math={this.props.std}/></codeX></ListGroup.Item>
+  				<ListGroup.Item>Graphing equation:<br></br><codeX><InlineMath math={this.props.g}/></codeX></ListGroup.Item>
   				<ListGroup.Item>X intercepts (roots):<br></br> <codeX>{this.props.rt}</codeX></ListGroup.Item>
   				<ListGroup.Item>Vertex:<br></br> <codeX>[{this.props.vx}, {this.props.vy}]</codeX></ListGroup.Item>
-  				<ListGroup.Item>Recursive equation:<br></br> <codeX>{this.props.curt}</codeX></ListGroup.Item>
+  				<ListGroup.Item>Recursive equation:<br></br><codeX><InlineMath math={this.props.recur}/></codeX></ListGroup.Item>
 				</ListGroup>;
 			</div>
 		);
