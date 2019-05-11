@@ -2,11 +2,13 @@
 	text-align: left;
 	margin: 40px;
 	background-color: #BDEDFF;
-  	background: linear-gradient(to right, #BDEDFF, #82CAFF);
-	background: -moz-linear-gradient(to right, #BDEDFF, #82CAFF);
-	background: -webkit-linear-gradient(to right, #BDEDFF, #82CAFF);
+  	background: linear-gradient(to right, #F0FFFF, #82CAFF);
+	background: -moz-linear-gradient(to right, #F0FFFF, #82CAFF);
+	background: -webkit-linear-gradient(to right, #F0FFFF, #82CAFF);
 	border: 2px solid #82CAFF;
 	padding: 10px;
+	display: flex;
+	flex-direction: column;
 }
 
 .App-logo {
@@ -29,6 +31,14 @@
 .App-link {
 	color: #61dafb;
 }
+
+.App-solution {
+	border: 1px solid #82CAFF;
+};
+
+.App-intro {
+	border: 5px solid #82CAFF;
+};
 
 numericinput {
 	padding: 10px;

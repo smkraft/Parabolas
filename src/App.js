@@ -15,13 +15,13 @@ import NumericInput from 'react-numeric-input';
 import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';
 
-var sprintf = require('sprintf-js').sprintf;
+var LineChart = require("react-chartjs").Line;
 
 class App extends React.Component {
 	render() {
 		return (
       <div className="App">
-        <div className="app-parabola">
+        <div className="App-parabola">
           <Parabola />
         </div>
 			</div>
@@ -69,7 +69,7 @@ class Parabola extends React.Component {
 			graph : "y = (x)^2",
 			xroots : [0, 0],
 			numxroots : 1,
-			roottxt : "One root at [0,0], this is the vertex",
+			roottxt : "[0,0], vertex",
 			vxN : 0,
 			vx: 0,
 			vy : 0,
@@ -119,14 +119,14 @@ class Parabola extends React.Component {
 	solve() {
 		if (this.state.a == 0 || this.state.a == null) {
 			this.setState({
-				standard: "Not a parabola!!",
-				graph: "",
-				roottxt: "",
-				vx: null,
-				vy: null,
+				standard: "Fail = 0x^2 + bx + c",
+				graph: "Huh?",
+				roottxt: "Of what?",
+				recursivetxt: "y(x) = y(x-1) + ???",
+				vx: 0,
+				vy: 0,
 			});
-
-			return;
+		return;
 		}
 
 		/* Write the standard equation. */
@@ -191,17 +191,17 @@ class Parabola extends React.Component {
 		var roottxt = "";
 		if (nx == 0) {
 			if (this.state.c >= 0) {
-				roottxt = "No roots (a > 0 and c > 0 and y of vertex > 0)";
+				roottxt = "No roots (a>0, c>0, yvertex > 0)";
 			}
 			else {
-				roottxt = "No roots (a < 0 and c < 0 and y of vertex < 0)";
+				roottxt = "No roots (a<0, c<0, yvertex < 0)";
 			}
 		}
 		else if (nx == 1) {
-			roottxt = "One root at [" + root1 + ", 0], this is the vertex";
+			roottxt = "[" + parseFloat(root1.toFixed(5)) + ", 0], vertex";
 		}
 		else {
-			roottxt = "Roots at [" + root1 + ", 0] and [" + root2 + ", 0]";
+			roottxt = "[" + parseFloat(root1.toFixed(5)) + ", 0], [" + parseFloat(root2.toFixed(5)) + ", 0]";
 		}
 
 		this.setState({
@@ -211,102 +211,106 @@ class Parabola extends React.Component {
 			roottxt: roottxt
 		});
 
-	/* Solve the vertex equation. */
-	var vxN, vy;
-	vxN = this.state.b / (2 * this.state.a);
-	vy = this.state.c - (this.state.b * this.state.b) / (4 * this.state.a);
+		/* Solve the vertex equation. */
+		var vxN, vy;
+		vxN = this.state.b / (2 * this.state.a);
+		vy = this.state.c - (this.state.b * this.state.b) / (4 * this.state.a);
+	
+		/* Write the graph equation. */
+		var graph = "y = ";
+		if (this.state.a < 0) {
+			graph += "-";
+		}
+		else {
+		}
+		if (Math.abs(this.state.a) != 1.0) {
+			graph += Math.abs(this.state.a);
+		}
+		graph += "(x";
+		if (vxN == 0) {
+		}
+		else if (vxN < 0) {
+			graph += " - " + parseFloat(Math.abs(vxN).toFixed(5));
+		}
+		else {
+			graph += " + " + parseFloat(vxN.toFixed(5));
+		}
+		graph += ")^2 ";
+	
+		if (vxN == 0) {
+		}
+		else if (vy <= 0) {
+			graph += "- " + parseFloat(Math.abs(vy).toFixed(5));
+		}
+		else {
+			graph += "+ " + parseFloat(vy.toFixed(5));
+		}
+	
+		this.setState({
+			graph: graph,
+			vxN: vxN,
+			vx: -vxN,
+			vy: vy
+		});
+	
+		var secondDiff = 2 * this.state.a;
+		/* Use Y intercept for point. */
+		var a = (this.state.a == null ? 0 : this.state.a);
+		var b = (this.state.b == null ? 0 : this.state.b);
+		var c = (this.state.c == null ? 0 : this.state.c);
 
-	/* Write the graph equation. */
-	var graph = "y = ";
-	if (this.state.a < 0) {
-		graph += "-";
-	}
-	else {
-	}
-	if (Math.abs(this.state.a) != 1.0) {
-		graph += Math.abs(this.state.a);
-	}
-	graph += "(x";
-	if (vxN == 0) {
-	}
-	else if (vxN < 0) {
-		graph += " - " + Math.abs(vxN);
-	}
-	else {
-		graph += " + " + vxN;
-	}
-	graph += ")^2 ";
-
-	if (vxN == 0) {
-	}
-	else if (vy <= 0) {
-		graph += "- " + Math.abs(vy);
-	}
-	else {
-		graph += "+ " + vy;
-	}
-
-	this.setState({
-		graph: graph,
-		vxN: vxN,
-		vx: -vxN,
-		vy: vy
-	});
-
-	var secondDiff = 2 * this.state.a;
-	/* Use Y intercept for point. */
-	var y0 = this.state.c;
-	var y1 = this.state.a * 1 * 1 + this.state.b * 1 + this.state.c;
-	var diffAtX0 = y1 - y0;
-
-	/* Equation is:
-		y(x) = y(x - 1) + secondDiff * x + y(x=0)
-	*/
-	var recursivetxt = "y(x) = y(x-1) ";
-	if (secondDiff > 0.0) {
-		recursivetxt += "+ ";
-	}
-	else {
-		recursivetxt += "- ";
-	}
-
-	if (Math.abs(secondDiff) != 1.0) {
-		recursivetxt += Math.abs(secondDiff);
-	}
-
-	recursivetxt += "x ";
-
-	if (diffAtX0 > 0.0) {
-		recursivetxt += "- " + Math.abs(diffAtX0);
-	}
-	else {
-		recursivetxt += "+ " + Math.abs(diffAtX0);
-	}
-
-	recursivetxt += " , y(0) = " + y0;
-
-	this.setState({
-		recursivetxt: recursivetxt,
-	});
-
-
-	var index;
-	var count = 0;
-	for (index = -vxN - 10; index <= -vxN + 10; index++, count++) {
-		data.labels[count] = index;
-		data.datasets[0].data[count] = this.state.a * index * index + this.state.b * index + this.state.c;
-		//data.datasets[1].data[count] = 2 * this.state.a * index + this.state.b;
-	}
+		var y0 = c;
+		var y1 = a * 1 * 1 + b * 1 + c;
+		var diffAtX0 = y1 - y0;
+	
+		/* Equation is:
+			y(x) = y(x - 1) + secondDiff * x + y(x=0)
+		*/
+		var recursivetxt = "y(x) = y(x-1) ";
+		if (secondDiff > 0.0) {
+			recursivetxt += "+ ";
+		}
+		else {
+			recursivetxt += "- ";
+		}
+	
+		if (Math.abs(secondDiff) != 1.0) {
+			recursivetxt += parseFloat(Math.abs(secondDiff.toFixed(5)));
+		}
+	
+		recursivetxt += "x ";
+	
+		if (diffAtX0 > 0.0) {
+			recursivetxt += "- " + parseFloat(Math.abs(diffAtX0.toFixed(5)));
+		}
+		else {
+			recursivetxt += "+ " + parseFloat(Math.abs(diffAtX0.toFixed(5)));
+		}
+	
+		recursivetxt += " , y(0) = " + parseFloat(y0.toFixed(5));
+	
+		this.setState({
+			recursivetxt: recursivetxt,
+		});
+	
+	
+		var index;
+		var count = 0;
+		for (index = -vxN - 10; index <= -vxN + 10; index++, count++) {
+			data.labels[count] = index;
+			data.datasets[0].data[count] = this.state.a * index * index + this.state.b * index + this.state.c;
+			//data.datasets[1].data[count] = 2 * this.state.a * index + this.state.b;
+		}
 
 	};
 
 	render() {
 		return (
 			<div className="Parabola">
-				<div className="app-intro">
+				<div className="App-intro">
 					<Intro firstTime={this.state.firstTime}/>
 				</div>
-				<div className="app-entry">
+				<div className="App-entry">
 					<Entry
 						a={this.state.a} onChangeA={this.changeA.bind(this)}
 						b={this.state.b} onChangeB={this.changeB.bind(this)}
@@ -315,8 +319,8 @@ class Parabola extends React.Component {
 				</div>
 				<Container fluid={true}>
 					<Row>
-						<Col md="auto">
-							<div className="app-solution">
+						<Col xs="12" md="5">
+							<div className="App-solution">
 								<Solution
 									std={this.state.standard}
 									a={this.state.a}
@@ -330,8 +334,8 @@ class Parabola extends React.Component {
 								/>
 							</div>
 						</Col>
-						<Col>
-							<div className="app-graph">
+						<Col xs="12" md="7">
+							<div className="App-graph">
 								<Graph />
 							</div>
 						</Col>
@@ -369,7 +373,7 @@ class Intro extends React.Component {
 				</Container>
 
         <Alert show={this.state.show} variant="success">
-          <Alert.Heading>Hi Ally, Aviva, Casey, and Emma !</Alert.Heading>
+          <Alert.Heading>Hi Ally, Aviva, Casey, and Emma -</Alert.Heading>
           <p>
 						We were talking after math night at Casey's last Thursday about what kinds of computer programs might be interesting to write.
 						I thought about it a bit, and it occurred to me that you all are going to have to be using the Quadratic Equation coming
@@ -419,13 +423,13 @@ class Intro extends React.Component {
 class Entry extends React.Component {
 	render() {
 		return (
-			<div className="Entry">
+			<div className="App-entry">
 				<br></br>
 				Enter your parabola below:
 				<br></br>
 				<br></br>
-				y = <NumericInput value={this.props.a} onChange={this.props.onChangeA} size={3}/> x^2 + 
-				<NumericInput value={this.props.b} onChange={this.props.onChangeB} size={3}/> x +
+				<InlineMath math="y = "/><NumericInput value={this.props.a} onChange={this.props.onChangeA} size={3}/> <InlineMath math="x^2 +"/>
+				<NumericInput value={this.props.b} onChange={this.props.onChangeB} size={3}/> <InlineMath math="x +"/>
 				<NumericInput value={this.props.c} onChange={this.props.onChangeC} size={3}/>
 				<br></br>
 				<br></br>
@@ -437,20 +441,18 @@ class Entry extends React.Component {
 class Solution extends React.Component {
 	render() {
 		return (
-			<div className="Solution">
+			<div className="App-solution">
 				<ListGroup>
   				<ListGroup.Item>Standard equation:<br></br><codeX><InlineMath math={this.props.std}/></codeX></ListGroup.Item>
   				<ListGroup.Item>Graphing equation:<br></br><codeX><InlineMath math={this.props.g}/></codeX></ListGroup.Item>
   				<ListGroup.Item>X intercepts (roots):<br></br> <codeX>{this.props.rt}</codeX></ListGroup.Item>
-  				<ListGroup.Item>Vertex:<br></br> <codeX>[{this.props.vx}, {this.props.vy}]</codeX></ListGroup.Item>
+  				<ListGroup.Item>Vertex:<br></br> <codeX>[{parseFloat(this.props.vx.toFixed(5))}, {parseFloat(this.props.vy.toFixed(5))}]</codeX></ListGroup.Item>
   				<ListGroup.Item>Recursive equation:<br></br><codeX><InlineMath math={this.props.recur}/></codeX></ListGroup.Item>
-				</ListGroup>;
+				</ListGroup>
 			</div>
 		);
 	}
 }
-
-var LineChart = require("react-chartjs").Line;
 
 var options = {
 
@@ -499,6 +501,15 @@ var options = {
 	//Boolean - Whether to horizontally center the label and point dot inside the grid
 	offsetGridLines : false,
 
+  layout: {
+    title: 'A Fancy Plot',
+    autosize: true
+  },
+
+  useResizeHandler: true,
+  style: {width: "100%", height: "100%"},
+	responsive: true,
+
 	scales: {
 		yAxes: [{
 			ticks: {
@@ -516,7 +527,7 @@ var options = {
 class Graph extends React.Component {
 	render() {
     return (
-			<LineChart data={data} options={options} width="500" height="500"/>
+			<LineChart data={data} options={options} responsive={true} useResizeHandler={true} autosize={true}/>
 		);
   }
 };
