@@ -74,6 +74,7 @@ class Parabola extends React.Component {
 			vx: 0,
 			vy : 0,
 			recursivetxt : "y(x) = y(x-1) + 2x",
+			factoredtxt: "y = (x - 0)(x - 0)",
 			firstTime : true,
 		};
 
@@ -123,6 +124,7 @@ class Parabola extends React.Component {
 				graph: "Huh?",
 				roottxt: "Of what?",
 				recursivetxt: "y(x) = y(x-1) + ???",
+				factoredtxt: "That's\\space no\\space parabola!",
 				vx: 0,
 				vy: 0,
 			});
@@ -293,7 +295,6 @@ class Parabola extends React.Component {
 			recursivetxt: recursivetxt,
 		});
 	
-	
 		var index;
 		var count = 0;
 		for (index = -vxN - 10; index <= -vxN + 10; index++, count++) {
@@ -302,6 +303,42 @@ class Parabola extends React.Component {
 			//data.datasets[1].data[count] = 2 * this.state.a * index + this.state.b;
 		}
 
+		var factoredtxt = "y = ";
+		if (radicand >= 0) {
+			if (a == 1.0) {
+			} else if (a == -1.0) {
+				factoredtxt += "-";
+			} else if (a < 0) {
+				factoredtxt += "-" + parseFloat(Math.abs(a).toFixed(5));
+			} else {
+				factoredtxt += parseFloat(a.toFixed(5));
+			}
+			factoredtxt += "(x ";
+			if (root1 >= 0) {
+				factoredtxt += "- " + parseFloat(root1.toFixed(5));
+			} else {
+				factoredtxt += "+ " + parseFloat(Math.abs(root1).toFixed(5));
+			}
+			factoredtxt += ")";
+			if (radicand == 0) {
+				factoredtxt += "^2";
+			} else {
+				factoredtxt += "(x ";
+				if (root2 >= 0) {
+					factoredtxt += "- " + parseFloat(root2.toFixed(5));
+				} else {
+					factoredtxt += "+ " + parseFloat(Math.abs(root2).toFixed(5));
+				}
+				factoredtxt += ")";
+			}
+		} else {
+			factoredtxt = "Complex\\space roots!";
+		}
+
+		this.setState({
+			factoredtxt: factoredtxt,
+		});
+		
 	};
 
 	render() {
@@ -331,6 +368,7 @@ class Parabola extends React.Component {
 									vx={this.state.vx}
 									vy={this.state.vy}
 									recur={this.state.recursivetxt}
+									fact={this.state.factoredtxt}
 								/>
 							</div>
 						</Col>
@@ -375,7 +413,7 @@ class Intro extends React.Component {
         <Alert show={this.state.show} variant="success">
           <Alert.Heading>Hi Ally, Aviva, Casey, and Emma -</Alert.Heading>
           <p>
-						We were talking after math night at Casey's last Thursday about what kinds of computer programs might be interesting to write.
+						We were talking after math night at Casey's recently about what kinds of computer programs might be interesting to write.
 						I thought about it a bit, and it occurred to me that you all are going to have to be using the Quadratic Equation coming
 						up pretty soon.  This equation lets you solve for the roots of a parabola without factoring.  It is a little daunting, and
 						looks like this:
@@ -448,6 +486,7 @@ class Solution extends React.Component {
   				<ListGroup.Item>X intercepts (roots):<br></br> <codeX>{this.props.rt}</codeX></ListGroup.Item>
   				<ListGroup.Item>Vertex:<br></br> <codeX>[{parseFloat(this.props.vx.toFixed(5))}, {parseFloat(this.props.vy.toFixed(5))}]</codeX></ListGroup.Item>
   				<ListGroup.Item>Recursive equation:<br></br><codeX><InlineMath math={this.props.recur}/></codeX></ListGroup.Item>
+  				<ListGroup.Item>Factored equation:<br></br><codeX><InlineMath math={this.props.fact}/></codeX></ListGroup.Item>
 				</ListGroup>
 			</div>
 		);
