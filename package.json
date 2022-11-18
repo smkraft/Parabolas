@@ -12,7 +12,7 @@
     "react-katex": "^2.0.2",
     "react-mathjax": "^1.0.1",
     "react-mathjax-preview": "^0.1.11",
-    "react-scripts": "3.0.0",
+    "react-scripts": "5.0.1",
     "sprint.js": "0.0.9"
   },
   "scripts": {
